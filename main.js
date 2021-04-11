@@ -50,12 +50,16 @@ const arrOfPeople = [
     },
   ]
   
+
+
   const listOfPlayers = []
   const blueTeam = []
   const redTeam = []
   
-  class player {
-    constructor(canThrowBall, canDodgeBall, hasPaid, isHealthy, yearsExperience){
+  class Player {
+    constructor(name, age, canThrowBall, canDodgeBall, hasPaid, isHealthy, yearsExperience){
+        this.name = name;
+        this.age = age
         this.canThrowBall = true;
         this.canDodgeBall = true;
         this.hasPaid = true;
@@ -63,13 +67,28 @@ const arrOfPeople = [
         this.yearsExperience = yearsExperience
     }
   }
+
+  
+
+
+
   class blueTeammate {
-    constructor(){}
+    constructor(name, mascot, color){
+      this.name = name;
+      this.mascot = mascot;
+      this.teamColor = color;
+    }
   }
   class redTeammate {
-    constructor(){}
+    constructor(name, mascot, color){
+      this.name = name;
+      this.mascot = mascot;
+      this.color = color
+    }
   }
   
+
+
   const listPeopleChoices = () => {
     const listElement = document.getElementById('people')
     arrOfPeople.map(person => {
@@ -84,5 +103,89 @@ const arrOfPeople = [
   }
   
   const makePlayer = (id) => {
-    console.log(`li ${id} was clicked!`)
+    let ul = document.getElementById("players")
+    arrOfPeople.forEach(person => {
+      if (person.id == id) {
+        let newPlayer = new Player(person.name, person.age, true, true, true, true, 0)
+        
+        //Create player list item
+        let li = document.createElement("li")
+        li.setAttribute("class", "player" + person.id)
+        li.innerText = person.name
+        
+        //Create Button
+        let buttonBlue = document.createElement("button")
+        buttonBlue.innerText = "Join Blue Team"
+        buttonBlue.setAttribute("class", "player" + person.id)
+        buttonBlue.addEventListener("click", joinBlueTeam)
+
+        let buttonRed = document.createElement("button")
+        buttonRed.innerText = "Join Red Team"
+        buttonRed.setAttribute("class", "player" + person.id)
+        buttonRed.addEventListener("click", joinRedTeam)
+
+
+        //Add player and buttons to DOM
+        ul.appendChild(li)      
+        ul.appendChild(buttonBlue)
+        ul.appendChild(buttonRed)
+        console.log(newPlayer)
+        console.log(person)
+        
+      }
+    })   
   }
+
+  const joinBlueTeam = (event) => {
+    let ul = document.getElementById("blue")
+    console.log(event.target.id)
+    arrOfPeople.forEach(person => {
+      if (person.id == event.target.className[event.target.className.length -1]) {
+        let li = document.createElement("li")
+        li.innerText = person.name
+        ul.appendChild(li)
+        let newBlueTeammate = new blueTeammate(person.name, "blue Lagoon", "blue")
+        blueTeam.push(newBlueTeammate)
+      }
+     
+    })
+   
+    removePlayer(event.target.className)
+    console.log(blueTeam)
+  }
+
+  const joinRedTeam = (event) => {
+    let ul = document.getElementById("red")
+    console.log(event.target)
+    arrOfPeople.forEach(person => {
+      if (person.id == event.target.className[event.target.className.length -1]) {
+        let li = document.createElement("li")
+        li.innerText = person.name
+        ul.appendChild(li)
+        let newRedTeammate = new redTeammate(person.name, "red Reaper", "red")
+        redTeam.push(newRedTeammate)
+        console.log(redTeam)
+      }
+      
+
+    })
+    
+    removePlayer(event.target.className)
+  }
+
+  const removePlayer = (chosenPlayer) => {
+    document.querySelectorAll("." + chosenPlayer).forEach(element => element.remove())
+  }
+
+
+// let assert = require("assert")
+
+// describe('New Teammate', function(){
+//   it(`push new player into redteam`, function(){
+      
+//     let newPlayer = new Player("Dick Balls", "person.age", true, true, true, true, 0)
+//     redTeam.push(newPlayer)
+//     assert.equal(redTeam[0].name, 'Dick Balls');
+//   });
+// })
+  
